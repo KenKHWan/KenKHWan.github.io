@@ -1,6 +1,7 @@
 // import { Grid } from "https://uicdn.toast.com/grid/latest/tui-grid.js";
+import 'https://oss.sheetjs.com/sheetjs/xlsx.full.min.js';
 import { html, LitElement, css } from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
-import { Tabulator } from 'https://unpkg.com/tabulator-tables@5.4.4/dist/js/tabulator_esm.min.js';
+import { Tabulator,DownloadModule, EditModule, SortModule, ResponsiveLayoutModule, InteractionModule, FormatModule } from 'https://unpkg.com/tabulator-tables@5.4.4/dist/js/tabulator_esm.min.js';
 // define the component
 
 
@@ -40,17 +41,21 @@ export class TablePlugin extends LitElement {
 		super();
 		this.columns = "[]";
 		this.data = "[]";
+		this.instance = undefined;
+		this.controls = undefined;
 	}
 
 	render() {
-		return html`<div id='tableGrid'></div>`;
+		return html`<div><div class='controls'></div><div id='tableGrid'></div></div>`;
 	}
+
 
 	connectedCallback() {
 		super.connectedCallback();
 	}
 
 	firstUpdated() {
+		Tabulator.registerModule([DownloadModule,EditModule, SortModule, ResponsiveLayoutModule, InteractionModule, FormatModule]);
 		this.BuildTable();
 	}
 
@@ -64,22 +69,32 @@ export class TablePlugin extends LitElement {
 		const data = JSON.parse(this.data);
 
 		let tableOptions = {
-			data: data
+			data: data,
+			autoColumns: true
 		};
 
-
-		tableOptions.autoColumns = true;
 		tableOptions.autoColumnsDefinitions = function (definitions) {
-			//definitions - array of column definition objects
-
-			definitions.forEach((column) => {
-				column.sorter = 'string';
+			definitions.push({
+				formatter: function (cell, formatterParams) {
+					return '<div>Edit</div>';
+				},
+				headerSort: false,
+				cellClick: function (e, cell) {
+					alert(JSON.stringify(cell.getRow().getData()));
+				}
 			});
 			return definitions;
+		} 
+
+		if (!this.instance) this.instance = new Tabulator(this.renderRoot.querySelector("#tableGrid"), tableOptions);
+		if (!this.controls) {
+			this.controls = this.renderRoot.querySelector(".controls");
+			this.controls.innerHTML = '<div id = "exportXLSX">Save as XLSX</div>';
+			let exportXlsxBtn = this.controls.querySelector("#exportXLSX");
+			exportXlsxBtn.addEventListener('click', (e) => {
+				this.instance.download("xlsx", "data.xlsx", { sheetName: "My Data" });
+			});
 		}
-
-		this.instance = new Tabulator(this.renderRoot.querySelector("#tableGrid"), tableOptions);
-
 
 	}
 }
