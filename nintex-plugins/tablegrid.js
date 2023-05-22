@@ -1,7 +1,7 @@
 // import { Grid } from "https://uicdn.toast.com/grid/latest/tui-grid.js";
 import 'https://oss.sheetjs.com/sheetjs/xlsx.full.min.js';
 import { html, LitElement, css } from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
-import { Tabulator,DownloadModule, EditModule, SortModule, ResponsiveLayoutModule, InteractionModule, FormatModule } from 'https://unpkg.com/tabulator-tables@5.4.4/dist/js/tabulator_esm.min.js';
+import { Tabulator,DownloadModule, EditModule,ExportModule, SortModule, ResponsiveLayoutModule, InteractionModule, FormatModule } from 'https://unpkg.com/tabulator-tables@5.4.4/dist/js/tabulator_esm.min.js';
 // define the component
 
 
@@ -55,7 +55,7 @@ export class TablePlugin extends LitElement {
 	}
 
 	firstUpdated() {
-		Tabulator.registerModule([DownloadModule,EditModule, SortModule, ResponsiveLayoutModule, InteractionModule, FormatModule]);
+		Tabulator.registerModule([DownloadModule,EditModule,ExportModule, SortModule, ResponsiveLayoutModule, InteractionModule, FormatModule]);
 		this.BuildTable();
 	}
 
