@@ -20,12 +20,12 @@ export class TablePlugin extends LitElement {
 		data: {
 			type: String,
 		},
-		outputKey: {
-			type:String
-		},
-		value: {
-			type:String
-		}
+		// outputKey: {
+		// 	type:String
+		// },
+		// value: {
+		// 	type:String
+		// }
 	};
 
 	static getMetaConfig() {
@@ -39,18 +39,18 @@ export class TablePlugin extends LitElement {
 					title: 'data',
 					description: 'Table Data as JSON'
 				},
-				outputKey: {
-					type: 'string',
-					title: 'Output Key',
-					description: 'Specify the column name of the table. When selecting a row, the attribute of the row identified by this value becomes the value of the table.'
-				},
-				value: {
-					type: 'string',
-					title: 'Value',
-					isValueField: true
-				},
+				// outputKey: {
+				// 	type: 'string',
+				// 	title: 'Output Key',
+				// 	description: 'Specify the column name of the table. When selecting a row, the attribute of the row identified by this value becomes the value of the table.'
+				// },
+				// value: {
+				// 	type: 'string',
+				// 	title: 'Value',
+				// 	isValueField: true
+				// },
 			},
-			events: ["ntx-value-change"]
+			// events: ["ntx-value-change"]
 		}
 	}
 
@@ -222,8 +222,8 @@ export class TablePlugin extends LitElement {
 			data: data,
 			autoColumns: true
 		};
-		var outputKey = this.outputKey;
-		var updateControlValue = this.UpdateControlValue;
+		// var outputKey = this.outputKey;
+		// var updateControlValue = this.UpdateControlValue;
 		tableOptions.autoColumnsDefinitions = function (definitions) {
 
 			var editColumn = {
@@ -232,10 +232,11 @@ export class TablePlugin extends LitElement {
 				},
 				headerSort: false,
 				cellClick: function (e, cell) {
-					if (outputKey != undefined) {
-						console.log(cell.getRow().getCell(outputKey).getValue() || "")
-					    updateControlValue(cell.getRow().getCell(outputKey).getValue() || "");
-					}
+					window.open(`https://aslbdemo.workflowcloud.com/forms/9704b106-7517-4881-b154-daca88c913e2?caseID=${cell.getRow().getCell("caseID").value}`);
+					// if (outputKey != undefined) {
+					// 	console.log(cell.getRow().getCell(outputKey).getValue() || "")
+					//     updateControlValue(cell.getRow().getCell(outputKey).getValue() || "");
+					// }
 				}
 			};
 			tableOptions.autoColumnsDefinitions = tableOptions.autoColumnsDefinitions.bind(this);
