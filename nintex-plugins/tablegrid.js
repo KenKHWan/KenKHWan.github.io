@@ -47,7 +47,7 @@ export class TablePlugin extends LitElement {
 				value: {
 					type: 'string',
 					title: 'Value',
-					isValueField: true,
+					isValueField: true
 				},
 			},
 			events: ["ntx-value-change"]
