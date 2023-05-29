@@ -96,6 +96,7 @@ export class TablePlugin extends LitElement {
 
 	BuildTable() {
 		const columns = JSON.parse(this.columns);
+		const data = JSON.parse(this.data);
 		// const data = [{
 		// 	"userId": 1,
 		// 	"id": 1,
