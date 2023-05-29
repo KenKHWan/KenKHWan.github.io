@@ -1,7 +1,7 @@
 // import { Grid } from "https://uicdn.toast.com/grid/latest/tui-grid.js";
 import 'https://oss.sheetjs.com/sheetjs/xlsx.full.min.js';
 import { html, LitElement, css } from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js';
-import { Tabulator,DownloadModule, EditModule,ExportModule, SortModule, ResponsiveLayoutModule, InteractionModule, FormatModule } from 'https://unpkg.com/tabulator-tables@5.4.4/dist/js/tabulator_esm.min.js';
+import { Tabulator, DownloadModule, EditModule, ExportModule, SortModule, ResponsiveLayoutModule, InteractionModule, FormatModule } from 'https://unpkg.com/tabulator-tables@5.4.4/dist/js/tabulator_esm.min.js';
 // define the component
 
 
@@ -32,8 +32,19 @@ export class TablePlugin extends LitElement {
 					type: 'string',
 					title: 'data',
 					description: 'Table Data as JSON'
-				}
-			}
+				},
+				outputKey: {
+					tpye: 'string',
+					title: 'Output Key',
+					description: 'Specify the column name of the table. When selecting a row, the attribute of the row identified by this value becomes the value of the table.'
+				},
+				value: {
+					type: 'string',
+					title: 'Value',
+					isValueField: true,
+				},
+			},
+			events: ["ntx-value-change"]
 		}
 	}
 
@@ -43,6 +54,7 @@ export class TablePlugin extends LitElement {
 		this.data = "[]";
 		this.instance = undefined;
 		this.controls = undefined;
+		this.outputKey = undefined;
 	}
 
 	render() {
@@ -55,7 +67,7 @@ export class TablePlugin extends LitElement {
 	}
 
 	firstUpdated() {
-		Tabulator.registerModule([DownloadModule,EditModule,ExportModule, SortModule, ResponsiveLayoutModule, InteractionModule, FormatModule]);
+		Tabulator.registerModule([DownloadModule, EditModule, ExportModule, SortModule, ResponsiveLayoutModule, InteractionModule, FormatModule]);
 		this.BuildTable();
 	}
 
@@ -64,30 +76,174 @@ export class TablePlugin extends LitElement {
 		this.BuildTable();
 	}
 
+	UpdateControlValue(value) {
+		const args = {
+			bubbles: true,
+			cancelable: false,
+			composed: true,
+			// value coming from input change event. 
+			detail: value,
+		};
+		const event = new CustomEvent('ntx-value-change', args);
+		this.dispatchEvent(event);
+	}
+
 	BuildTable() {
-		// const columns = JSON.parse(this.columns);
-		const data = JSON.parse(this.data);
+		const columns = JSON.parse(this.columns);
+		// const data = [{
+		// 	"userId": 1,
+		// 	"id": 1,
+		// 	"title": "delectus aut autem",
+		// 	"completed": false
+		// },
+		// {
+		// 	"userId": 1,
+		// 	"id": 2,
+		// 	"title": "quis ut nam facilis et officia qui",
+		// 	"completed": false
+		// },
+		// {
+		// 	"userId": 1,
+		// 	"id": 3,
+		// 	"title": "fugiat veniam minus",
+		// 	"completed": false
+		// },
+		// {
+		// 	"userId": 1,
+		// 	"id": 4,
+		// 	"title": "et porro tempora",
+		// 	"completed": true
+		// },
+		// {
+		// 	"userId": 1,
+		// 	"id": 5,
+		// 	"title": "laboriosam mollitia et enim quasi adipisci quia provident illum",
+		// 	"completed": false
+		// },
+		// {
+		// 	"userId": 1,
+		// 	"id": 6,
+		// 	"title": "qui ullam ratione quibusdam voluptatem quia omnis",
+		// 	"completed": false
+		// },
+		// {
+		// 	"userId": 1,
+		// 	"id": 7,
+		// 	"title": "illo expedita consequatur quia in",
+		// 	"completed": false
+		// },
+		// {
+		// 	"userId": 1,
+		// 	"id": 8,
+		// 	"title": "quo adipisci enim quam ut ab",
+		// 	"completed": true
+		// },
+		// {
+		// 	"userId": 1,
+		// 	"id": 9,
+		// 	"title": "molestiae perspiciatis ipsa",
+		// 	"completed": false
+		// },
+		// {
+		// 	"userId": 1,
+		// 	"id": 10,
+		// 	"title": "illo est ratione doloremque quia maiores aut",
+		// 	"completed": true
+		// },
+		// {
+		// 	"userId": 1,
+		// 	"id": 11,
+		// 	"title": "vero rerum temporibus dolor",
+		// 	"completed": true
+		// },
+		// {
+		// 	"userId": 1,
+		// 	"id": 12,
+		// 	"title": "ipsa repellendus fugit nisi",
+		// 	"completed": true
+		// },
+		// {
+		// 	"userId": 1,
+		// 	"id": 13,
+		// 	"title": "et doloremque nulla",
+		// 	"completed": false
+		// },
+		// {
+		// 	"userId": 1,
+		// 	"id": 14,
+		// 	"title": "repellendus sunt dolores architecto voluptatum",
+		// 	"completed": true
+		// },
+		// {
+		// 	"userId": 1,
+		// 	"id": 15,
+		// 	"title": "ab voluptatum amet voluptas",
+		// 	"completed": true
+		// },
+		// {
+		// 	"userId": 1,
+		// 	"id": 16,
+		// 	"title": "accusamus eos facilis sint et aut voluptatem",
+		// 	"completed": true
+		// },
+		// {
+		// 	"userId": 1,
+		// 	"id": 17,
+		// 	"title": "quo laboriosam deleniti aut qui",
+		// 	"completed": true
+		// },
+		// {
+		// 	"userId": 1,
+		// 	"id": 18,
+		// 	"title": "dolorum est consequatur ea mollitia in culpa",
+		// 	"completed": false
+		// },
+		// {
+		// 	"userId": 1,
+		// 	"id": 19,
+		// 	"title": "molestiae ipsa aut voluptatibus pariatur dolor nihil",
+		// 	"completed": true
+		// },
+		// {
+		// 	"userId": 1,
+		// 	"id": 20,
+		// 	"title": "ullam nobis libero sapiente ad optio sint",
+		// 	"completed": true
+		// }];
 
 		let tableOptions = {
 			data: data,
 			autoColumns: true
 		};
-
+		var outputKey = this.outputKey;
+		var updateControlValue = this.UpdateControlValue;
 		tableOptions.autoColumnsDefinitions = function (definitions) {
-			definitions.push({
+
+			var editColumn = {
 				formatter: function (cell, formatterParams) {
 					return '<div>Edit</div>';
 				},
 				headerSort: false,
 				cellClick: function (e, cell) {
-					alert(JSON.stringify(cell.getRow().getData()));
+					if (outputKey != undefined) {
+						console.log(cell.getRow().getCell(outputKey).getValue() || "")
+					    updateControlValue(cell.getRow().getCell(outputKey).getValue() || "");
+					}
 				}
-			});
-			return definitions;
-		} 
+			};
+			tableOptions.autoColumnsDefinitions = tableOptions.autoColumnsDefinitions.bind(this);
 
-		if (!this.instance) this.instance = new Tabulator(this.renderRoot.querySelector("#tableGrid"), tableOptions);
-		if (!this.controls) {
+			return [
+				editColumn,
+				...definitions
+			]
+		}
+
+		if (!this.instance) {
+			this.instance = new Tabulator(this.renderRoot.querySelector("#tableGrid"), tableOptions);
+		}
+
+		if (this.instance && !this.controls && this.outputKey) {
 			this.controls = this.renderRoot.querySelector(".controls");
 			this.controls.innerHTML = '<div id = "exportXLSX">Save as XLSX</div>';
 			let exportXlsxBtn = this.controls.querySelector("#exportXLSX");
