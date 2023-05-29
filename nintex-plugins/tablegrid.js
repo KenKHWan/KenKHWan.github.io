@@ -39,11 +39,11 @@ export class TablePlugin extends LitElement {
 					title: 'data',
 					description: 'Table Data as JSON'
 				},
-				outputKey: {
-					type: 'string',
-					title: 'Output Key',
-					description: 'Specify the column name of the table. When selecting a row, the attribute of the row identified by this value becomes the value of the table.'
-				},
+				// outputKey: {
+				// 	type: 'string',
+				// 	title: 'Output Key',
+				// 	description: 'Specify the column name of the table. When selecting a row, the attribute of the row identified by this value becomes the value of the table.'
+				// },
 				value: {
 					type: 'string',
 					title: 'Value',
