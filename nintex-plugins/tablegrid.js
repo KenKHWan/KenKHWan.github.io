@@ -232,7 +232,7 @@ export class TablePlugin extends LitElement {
 				},
 				headerSort: false,
 				cellClick: function (e, cell) {
-					window.open(`https://aslbdemo.workflowcloud.com/forms/9704b106-7517-4881-b154-daca88c913e2?caseID=${cell.getRow().getCell("caseID").value}`);
+					window.open(`https://aslbdemo.workflowcloud.com/forms/9704b106-7517-4881-b154-daca88c913e2?caseID=${cell.getRow().getCell("caseID").getValue()}`);
 					// if (outputKey != undefined) {
 					// 	console.log(cell.getRow().getCell(outputKey).getValue() || "")
 					//     updateControlValue(cell.getRow().getCell(outputKey).getValue() || "");
