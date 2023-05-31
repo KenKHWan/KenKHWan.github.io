@@ -12,6 +12,25 @@ export class TablePlugin extends LitElement {
 /*# sourceMappingURL=tabulator.min.css.map */
     
 	.control > .btn {cursor:pointer;height:var(--ntx-form-theme-control-height);color:var(--ntx-form-theme-color-primary);border:(--ntx-form-theme-color-border);}
+	
+	.container {position:relative;z-index:1}
+	.container > .loader {position:absolute;top:0;left:0;width:100%;height:1;z-index:999}
+	
+	/* Spinner CSS */
+	.loader {
+		border: 16px solid #f3f3f3; /* Light grey */
+		border-top: 16px solid #3498db; /* Blue */
+		border-radius: 50%;
+		width: 120px;
+		height: 120px;
+		animation: spin 2s linear infinite;
+	}
+
+	@keyframes spin {
+		0% { transform: rotate(0deg); }
+		100% { transform: rotate(360deg); }
+	}
+	
 	`;
 
 	static properties = {
@@ -66,7 +85,8 @@ export class TablePlugin extends LitElement {
 	}
 
 	render() {
-		return html`<div><div class='controls'></div><div id='tableGrid'></div></div>`;
+
+		return html`<div class='container'><div><div class='controls'></div><div id='tableGrid'></div></div></div>`;
 	}
 
 
@@ -98,127 +118,7 @@ export class TablePlugin extends LitElement {
 
 	BuildTable() {
 		const columns = JSON.parse(this.columns);
-		const data = JSON.parse(this.data);
-		// const data = [{
-		// 	"userId": 1,
-		// 	"id": 1,
-		// 	"title": "delectus aut autem",
-		// 	"completed": false
-		// },
-		// {
-		// 	"userId": 1,
-		// 	"id": 2,
-		// 	"title": "quis ut nam facilis et officia qui",
-		// 	"completed": false
-		// },
-		// {
-		// 	"userId": 1,
-		// 	"id": 3,
-		// 	"title": "fugiat veniam minus",
-		// 	"completed": false
-		// },
-		// {
-		// 	"userId": 1,
-		// 	"id": 4,
-		// 	"title": "et porro tempora",
-		// 	"completed": true
-		// },
-		// {
-		// 	"userId": 1,
-		// 	"id": 5,
-		// 	"title": "laboriosam mollitia et enim quasi adipisci quia provident illum",
-		// 	"completed": false
-		// },
-		// {
-		// 	"userId": 1,
-		// 	"id": 6,
-		// 	"title": "qui ullam ratione quibusdam voluptatem quia omnis",
-		// 	"completed": false
-		// },
-		// {
-		// 	"userId": 1,
-		// 	"id": 7,
-		// 	"title": "illo expedita consequatur quia in",
-		// 	"completed": false
-		// },
-		// {
-		// 	"userId": 1,
-		// 	"id": 8,
-		// 	"title": "quo adipisci enim quam ut ab",
-		// 	"completed": true
-		// },
-		// {
-		// 	"userId": 1,
-		// 	"id": 9,
-		// 	"title": "molestiae perspiciatis ipsa",
-		// 	"completed": false
-		// },
-		// {
-		// 	"userId": 1,
-		// 	"id": 10,
-		// 	"title": "illo est ratione doloremque quia maiores aut",
-		// 	"completed": true
-		// },
-		// {
-		// 	"userId": 1,
-		// 	"id": 11,
-		// 	"title": "vero rerum temporibus dolor",
-		// 	"completed": true
-		// },
-		// {
-		// 	"userId": 1,
-		// 	"id": 12,
-		// 	"title": "ipsa repellendus fugit nisi",
-		// 	"completed": true
-		// },
-		// {
-		// 	"userId": 1,
-		// 	"id": 13,
-		// 	"title": "et doloremque nulla",
-		// 	"completed": false
-		// },
-		// {
-		// 	"userId": 1,
-		// 	"id": 14,
-		// 	"title": "repellendus sunt dolores architecto voluptatum",
-		// 	"completed": true
-		// },
-		// {
-		// 	"userId": 1,
-		// 	"id": 15,
-		// 	"title": "ab voluptatum amet voluptas",
-		// 	"completed": true
-		// },
-		// {
-		// 	"userId": 1,
-		// 	"id": 16,
-		// 	"title": "accusamus eos facilis sint et aut voluptatem",
-		// 	"completed": true
-		// },
-		// {
-		// 	"userId": 1,
-		// 	"id": 17,
-		// 	"title": "quo laboriosam deleniti aut qui",
-		// 	"completed": true
-		// },
-		// {
-		// 	"userId": 1,
-		// 	"id": 18,
-		// 	"title": "dolorum est consequatur ea mollitia in culpa",
-		// 	"completed": false
-		// },
-		// {
-		// 	"userId": 1,
-		// 	"id": 19,
-		// 	"title": "molestiae ipsa aut voluptatibus pariatur dolor nihil",
-		// 	"completed": true
-		// },
-		// {
-		// 	"userId": 1,
-		// 	"id": 20,
-		// 	"title": "ullam nobis libero sapiente ad optio sint",
-		// 	"completed": true
-		// }];
+		const data = JSON.parse(this.data).filter(x=>x.caseProgress!=="dummy".toLowerCase());
 
 		let tableOptions = {
 			data: data,
@@ -250,7 +150,17 @@ export class TablePlugin extends LitElement {
 		}
 
 		if (!this.instance) {
+			
+			let spinner = document.createElement('div');
+			spinner.class = "loader";
+
 			this.instance = new Tabulator(this.renderRoot.querySelector("#tableGrid"), tableOptions);
+			this.instance.on('tableBuilding',() => {
+				this.renderRoot.querySelector(".container").appendChild(spinner);
+			});
+			this.instance.on('tableBuilt',() => {
+				this.renderRoot.querySelector(".container").removeChild(spinner);
+			});
 		}
 
 		if (this.instance && !this.controls) {
