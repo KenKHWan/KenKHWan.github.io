@@ -87,10 +87,8 @@ export class TablePlugin extends LitElement {
 		return html`
 		<link href="https://unpkg.com/tabulator-tables@5.5.0/dist/css/tabulator.min.css" rel="stylesheet">
 		<div class='container'>
-			<div>
-				<div class='controls'></div>
-				<div id='tableGrid'></div>
-			</div>
+			<div class='controls'></div>
+			<div id='tableGrid'></div>
 		</div>
 		`;
 	}
@@ -129,7 +127,7 @@ export class TablePlugin extends LitElement {
 		let tableOptions = {
 			data: data,
 			autoColumns: true,
-			layout:"fitData"
+			layout:"fitDataColumn"
 		};
 		// var outputKey = this.outputKey;
 		// var updateControlValue = this.UpdateControlValue;
@@ -162,15 +160,15 @@ export class TablePlugin extends LitElement {
 			spinner.class = "loader";
 
 			this.instance = new Tabulator(this.renderRoot.querySelector("#tableGrid"), tableOptions);
-			this.instance.on('renderStarted',() => {
-				this.renderRoot.querySelector(".container").appendChild(spinner);
-			});
-			this.instance.on('renderComplete',() => {
-				setTimeout(()=>{
-				if(this.renderRoot.querySelector(".container .loader")!=undefined)
-					this.renderRoot.querySelector(".container").removeChild(this.renderRoot.querySelector(".loader"));
-				},1000);
-			});
+			// this.instance.on('renderStarted',() => {
+			// 	this.renderRoot.querySelector(".container").appendChild(spinner);
+			// });
+			// this.instance.on('renderComplete',() => {
+			// 	setTimeout(()=>{
+			// 	if(this.renderRoot.querySelector(".container .loader")!=undefined)
+			// 		this.renderRoot.querySelector(".container").removeChild(this.renderRoot.querySelector(".loader"));
+			// 	},1000);
+			// });
 		}
 
 		if (this.instance && !this.controls) {
