@@ -128,7 +128,8 @@ export class TablePlugin extends LitElement {
 			data: data,
 			autoColumns: true,
 			columnDefaults:{
-				maxWidth:250
+				maxWidth:250,
+				maxHeight:50
 			}
 		};
 		// var outputKey = this.outputKey;
