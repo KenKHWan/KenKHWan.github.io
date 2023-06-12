@@ -160,7 +160,10 @@ export class TablePlugin extends LitElement {
 				this.renderRoot.querySelector(".container").appendChild(spinner);
 			});
 			this.instance.on('renderComplete',() => {
-				this.renderRoot.querySelector(".container").removeChild(spinner);
+				setTimeout(()=>{
+				if(this.renderRoot.querySelector(".container .loader")!=undefined)
+					this.renderRoot.querySelector(".container").removeChild(spinner);
+				},1000);
 			});
 		}
 
