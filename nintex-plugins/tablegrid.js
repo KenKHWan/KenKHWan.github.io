@@ -178,6 +178,7 @@ export class TablePlugin extends LitElement {
 			exportXlsxBtn.addEventListener('click', (e) => {
 				this.instance.download("xlsx", "data.xlsx", { sheetName: "My Data" });
 			});
+			this.instance.setData(data);
 		}
 
 	}
