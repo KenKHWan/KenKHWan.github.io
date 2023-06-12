@@ -127,7 +127,7 @@ export class TablePlugin extends LitElement {
 		let tableOptions = {
 			data: data,
 			autoColumns: true,
-			layout:"fitColumns"
+			layout:"fitData"
 		};
 		// var outputKey = this.outputKey;
 		// var updateControlValue = this.UpdateControlValue;
