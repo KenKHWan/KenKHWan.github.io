@@ -8,7 +8,7 @@ import { Tabulator, DownloadModule, EditModule, ExportModule, SortModule, Respon
 export class TablePlugin extends LitElement {
 	/*copied from tabulator.min.css*/
 	static styles = css`
-
+	.control {width:100%;}
 	.control > .btn {cursor:pointer;height:var(--ntx-form-theme-control-height);color:var(--ntx-form-theme-color-primary);border:(--ntx-form-theme-color-border);}
 	
 	.container {position:relative;z-index:1}
@@ -126,8 +126,7 @@ export class TablePlugin extends LitElement {
 
 		let tableOptions = {
 			data: data,
-			autoColumns: true,
-			layout:"fitData"
+			autoColumns: true
 		};
 		// var outputKey = this.outputKey;
 		// var updateControlValue = this.UpdateControlValue;
@@ -146,7 +145,6 @@ export class TablePlugin extends LitElement {
 					// }
 				}
 			};
-			tableOptions.autoColumnsDefinitions = tableOptions.autoColumnsDefinitions.bind(this);
 
 			return [
 				editColumn,
