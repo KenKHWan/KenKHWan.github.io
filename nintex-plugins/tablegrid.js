@@ -127,6 +127,7 @@ export class TablePlugin extends LitElement {
 		let tableOptions = {
 			data: data,
 			autoColumns: true,
+			maxHeight:600,
 			columnDefaults:{
 				maxWidth:250,
 				maxHeight:50
