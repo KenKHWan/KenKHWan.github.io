@@ -126,7 +126,10 @@ export class TablePlugin extends LitElement {
 
 		let tableOptions = {
 			data: data,
-			autoColumns: true
+			autoColumns: true,
+			columnDefaults:{
+				maxWidth:250
+			}
 		};
 		// var outputKey = this.outputKey;
 		// var updateControlValue = this.UpdateControlValue;
@@ -134,9 +137,10 @@ export class TablePlugin extends LitElement {
 
 			var editColumn = {
 				formatter: function (cell, formatterParams) {
-					return '<div style="width:80px">Edit</div>';
+					return '<div>Edit</div>';
 				},
 				headerSort: false,
+				maxWidth:40,
 				cellClick: function (e, cell) {
 					window.open(`https://aslbdemo.workflowcloud.com/forms/9704b106-7517-4881-b154-daca88c913e2?caseID=${cell.getRow().getCell("caseID").getValue()}`);
 					// if (outputKey != undefined) {
