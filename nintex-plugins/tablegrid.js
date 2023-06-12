@@ -131,7 +131,7 @@ export class TablePlugin extends LitElement {
 
 			var editColumn = {
 				formatter: function (cell, formatterParams) {
-					return '<div>Edit</div>';
+					return '<div style="width:80px">Edit</div>';
 				},
 				headerSort: false,
 				cellClick: function (e, cell) {
